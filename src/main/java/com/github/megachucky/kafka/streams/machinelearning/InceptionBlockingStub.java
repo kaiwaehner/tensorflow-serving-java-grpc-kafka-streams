@@ -32,7 +32,6 @@ import static io.grpc.stub.ClientCalls.blockingUnaryCall;
 
 /**
  * Stub implementation for {@link #SERVICE_NAME} (Tensorflow' Inception service )
- * @author Thamme Gowda
  */
 public class InceptionBlockingStub extends AbstractStub<InceptionBlockingStub> {
 
