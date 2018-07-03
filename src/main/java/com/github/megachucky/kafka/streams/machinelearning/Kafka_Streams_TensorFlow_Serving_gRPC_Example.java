@@ -18,12 +18,7 @@
 package com.github.megachucky.kafka.streams.machinelearning;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -31,47 +26,37 @@ import java.util.Properties;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.ForeachAction;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 
 /**
- * @author Thamme Gowda
+ * @author Kai Waehner
  */
 public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 
 	private static final String imageInputTopic = "ImageInputTopic";
 	private static final String imageOutputTopic = "ImageOutputTopic";
 
-	// Prediction Value
-	private static String imageClassification = "unknown";
-	private static String imageProbability = "unknown";
+	private static final String server = "localhost";
+	private static final Integer port = 9000;
 
+	// Image path will be received from Kafka message to topic 'imageInputTopic'
 	private static String imagePath = null;
+
+	// Prediction of the TensorFlow Image Recognition model
 	private static List<Map.Entry<String, Double>> list = null;
 
 	public static void main(String[] args) throws Exception {
 
-		// if (args.length != 2){
-		// System.out.println("Invalid args");
-		// System.out.println("Usage: <host:port> <image>");
-		// System.out.println("\tExample: localhost:9090 ~/Pictures/cat.jpg");
-		// System.exit(1);
-		// }
-
-		// String[] parts = args[0].split(":");
-		// String server = parts[0];
-		// int port = Integer.parseInt(parts[1]);
-		// String imagePath = "src/main/resources/example.jpg";
-
 		// Configure Kafka Streams Application
 		final String bootstrapServers = args.length > 0 ? args[0] : "localhost:9092";
+
 		final Properties streamsConfiguration = new Properties();
+
 		// Give the Streams application a unique name. The name must be unique
-		// in the Kafka cluster
-		// against which the application is run.
-		streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG,
-				"kafka-streams-tensorflow-image-recognition-example");
+		// in the Kafka cluster against which the application is run.
+		streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-streams-tensorflow-serving-gRPC-example");
+
 		// Where to find Kafka broker(s).
 		streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 
@@ -80,8 +65,8 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 		streamsConfiguration.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		streamsConfiguration.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 
-		// In the subsequent lines we define the processing topology of the
-		// Streams application.
+		// In the subsequent lines we define the processing topology of the Streams
+		// application.
 		final KStreamBuilder builder = new KStreamBuilder();
 
 		// Construct a `KStream` from the input topic "ImageInputTopic", where
@@ -92,15 +77,11 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 		// analytic model)
 		imageInputLines.foreach((key, value) -> {
 
-		
 			System.out.println("Image path: " + value);
 
 			imagePath = value;
-			
-			imageClassification = "unknown";
-			imageProbability = "unknown";
 
-			TensorflowObjectRecogniser recogniser = new TensorflowObjectRecogniser("localhost", 9000);
+			TensorflowObjectRecogniser recogniser = new TensorflowObjectRecogniser(server, port);
 
 			System.out.println("Image = " + imagePath);
 			InputStream jpegStream;
@@ -111,7 +92,6 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 				recogniser.close();
 				jpegStream.close();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -136,7 +116,8 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 
 		System.out.println("Image Recognition Microservice is running...");
 
-		System.out.println("Input image to Kafka topic " + imageInputTopic + "; Output prediction to Kafka topic " + imageOutputTopic);
+		System.out.println("Input images arrive at Kafka topic " + imageInputTopic + "; Output predictions going to Kafka topic "
+				+ imageOutputTopic);
 
 		// Add shutdown hook to respond to SIGTERM and gracefully close Kafka
 		// Streams
