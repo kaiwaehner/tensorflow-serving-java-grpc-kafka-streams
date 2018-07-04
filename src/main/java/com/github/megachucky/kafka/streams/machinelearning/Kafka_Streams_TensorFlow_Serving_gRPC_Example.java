@@ -25,9 +25,9 @@ import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KStreamBuilder;
 
 /**
  * @author Kai Waehner
@@ -62,12 +62,13 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 
 		// Specify default (de)serializers for record keys and for record
 		// values.
-		streamsConfiguration.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-		streamsConfiguration.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 
 		// In the subsequent lines we define the processing topology of the Streams
 		// application.
-		final KStreamBuilder builder = new KStreamBuilder();
+//		final KStreamBuilder builder = new KStreamBuilder();
+		final StreamsBuilder builder = new StreamsBuilder();
 
 		// Construct a `KStream` from the input topic "ImageInputTopic", where
 		// message values represent lines of text
@@ -108,7 +109,7 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 
 		// Start Kafka Streams Application to process new incoming images from the Input
 		// Topic
-		final KafkaStreams streams = new KafkaStreams(builder, streamsConfiguration);
+		final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfiguration);
 
 		streams.cleanUp();
 
