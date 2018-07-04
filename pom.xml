@@ -31,8 +31,8 @@
 	<properties>
 		<exec.mainClass>
 			com.github.megachucky.kafka.streams.machinelearning.Kafka_Streams_TensorFlow_Serving_gRPC_Example</exec.mainClass>
-		<grpc.version>1.6.1</grpc.version>
-		<protobuf.version>3.0.0-beta-3</protobuf.version>
+		<grpc.version>1.13.1</grpc.version>
+		<protobuf.version>3.6.0</protobuf.version>
 		<tika.version>1.14-SNAPSHOT</tika.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<java.version>1.8</java.version>
