@@ -28,6 +28,11 @@ However, direct deployment of models is not always a feasible approach. Sometime
 ### TensorFlow Serving
 The blog post "[How to deploy TensorFlow models to production using TF Serving](https://medium.freecodecamp.org/how-to-deploy-tensorflow-models-to-production-using-tf-serving-4b4b78d41700)" is a great explanation of how to export and deploy trained TensorFlow models to a TensorFlow Serving infrastructure. You can either deploy your own infrastructure anywhere or leverage a cloud service like Google Cloud ML Engine. A [SavedModel](https://www.tensorflow.org/programmers_guide/saved_model#build_and_load_a_savedmodel) is TensorFlow's recommended format for saving models, and it is the required format for deploying trained TensorFlow models using TensorFlow Serving or deploying on Goodle Cloud ML Engine.
 
+The core architecture is described in detail in [TensorFlow Serving's architecture overview](https://www.tensorflow.org/serving/architecture_overview):
+
+![TensorFlow Serving Architecture](pictures/TensorFlow_Serving_Architecture.svg)
+
+This architecture allows deployement and managend of different models and versions of these models including additional features like A/B testing. In the following demo, we just deploy one single TensorFlow model for Image Recognition (based on the famous Inception neural network).
 
 ## Demo: Mixing Stream Processing with RPC: TensorFlow Serving + Kafka Streams
 
