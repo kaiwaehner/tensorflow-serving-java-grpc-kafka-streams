@@ -6,9 +6,9 @@ Most ML servers for model serving are also extendible to serve other types of mo
 ## Model Serving: Stream Processing vs. Request Response
 Some background on model serving alternatives:
 
-Machine Learning / Deep Learning models can be used in different ways to do predictions. The preferred way is to deploy an analytic model directly into a stream processing application (like [Kafka Streams](https://kafka.apache.org/documentation/streams/)). You could e.g. use the [TensorFlow for Java API](https://www.tensorflow.org/install/install_java). This allows best latency and independence of external services. Examples here: [Model Inference within Kafka Streams Microservices](https://github.com/kaiwaehner/kafka-streams-machine-learning-examples). 
+Machine Learning / Deep Learning models can be used in different ways to do predictions. The preferred way is to deploy an analytic model directly into a stream processing application (like [Kafka Streams](https://kafka.apache.org/documentation/streams/)). You could e.g. use the [TensorFlow for Java API](https://www.tensorflow.org/install/install_java). This allows best latency and independence of external services. Examples here: [Model Inference within Kafka Streams Microservices using TensorFlow, H2O.ai, Deeplearning4j](https://github.com/kaiwaehner/kafka-streams-machine-learning-examples). 
 
-However, direct deployment of models is not always a feasible approach. Sometimes it makes sense or is needed to deploy a model in another serving infrastructure like TensorFlow Serving for TensorFlow models. Organisational or technical reasons might force this approach. Or you might want to leverage the built-in features for managing and versioning different models in the model server. This Github project shows an **example for how to access a model serving infrastructure from a stream processing microservice leveraging Apache Kafka and Kafka Streams**.
+However, direct deployment of models is not always a feasible approach. Sometimes it makes sense or is needed to deploy a model in another serving infrastructure like TensorFlow Serving for TensorFlow models. Model Inference is then done via RPC / Request Response communication. Organisational or technical reasons might force this approach. Or you might want to leverage the built-in features for managing and versioning different models in the model server. This Github project shows an **example for how to access a model serving infrastructure from a stream processing microservice leveraging Apache Kafka and Kafka Streams**.
 
 ![Model Serving: Stream Processing vs. Request Response](pictures/Model_Inference_Stream_Processing_vs_Request_Response.png)
 
@@ -26,6 +26,8 @@ However, direct deployment of models is not always a feasible approach. Sometime
 
 
 ### TensorFlow Serving
+Let’s discuss TensorFlow Serving quickly. It can be used to host your trained analytic models. Like with most model servers, you can do inference via request-response paradigm. gRPC and REST / HTTP are the two common technologies and concepts used.
+
 The blog post "[How to deploy TensorFlow models to production using TF Serving](https://medium.freecodecamp.org/how-to-deploy-tensorflow-models-to-production-using-tf-serving-4b4b78d41700)" is a great explanation of how to export and deploy trained TensorFlow models to a TensorFlow Serving infrastructure. You can either deploy your own infrastructure anywhere or leverage a cloud service like Google Cloud ML Engine. A [SavedModel](https://www.tensorflow.org/programmers_guide/saved_model#build_and_load_a_savedmodel) is TensorFlow's recommended format for saving models, and it is the required format for deploying trained TensorFlow models using TensorFlow Serving or deploying on Goodle Cloud ML Engine.
 
 The core architecture is described in detail in [TensorFlow Serving's architecture overview](https://www.tensorflow.org/serving/architecture_overview):
