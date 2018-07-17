@@ -109,13 +109,13 @@ Let's build the project:
                 
 This example executes a Java main method, i.e. it starts a local Java process running the Kafka Streams microservice. It waits continuously for new events arriving at 'ImageInputTopic' to do a model inference (via gRCP call to TensorFlow Serving) and then sending the prediction to 'ImageOutputTopic' - all in real time within milliseconds.
 
-                java -cp target/kafka-streams-machine-learning-examples-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.megachucky.kafka.streams.machinelearning.Kafka_Streams_TensorFlow_Serving_gRPC_Image_Recognition_Example
+                java -cp target/tensorflow-serving-java-grpc-kafka-streams-1.0.jar com.github.megachucky.kafka.streams.machinelearning.Kafka_Streams_TensorFlow_Serving_gRPC_Example
 
 In the same way, you could deploy this Kafka Streams microservice anywhere - including Kubernetes (e.g. on premise OpenShift cluster or Google Kubernetes Engine), Mesosphere, Amazon ECS or even in a Java EE app - and scale it up and down dynamically.
                 
 Now send messages, e.g. with kafkacat...
 
-                echo -e "src/main/resources/TensorFlow_Images/dog.jpg" | kafkacat -b localhost:9092 -P -t ImageInputTopic
+                echo -e "src/main/resources/example.jpg" | kafkacat -b localhost:9092 -P -t ImageInputTopic
                 
 ... and consume predictions:
 
