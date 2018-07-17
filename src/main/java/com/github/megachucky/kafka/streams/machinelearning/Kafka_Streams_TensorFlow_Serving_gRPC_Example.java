@@ -19,6 +19,7 @@ package com.github.megachucky.kafka.streams.machinelearning;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -43,9 +44,6 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 	// Image path will be received from Kafka message to topic 'imageInputTopic'
 	private static String imagePath = null;
 
-	// Prediction of the TensorFlow Image Recognition model
-	private static List<Map.Entry<String, Double>> list = null;
-
 	public static void main(String[] args) throws Exception {
 
 		// Configure Kafka Streams Application
@@ -67,16 +65,13 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 
 		// In the subsequent lines we define the processing topology of the Streams
 		// application.
-//		final KStreamBuilder builder = new KStreamBuilder();
 		final StreamsBuilder builder = new StreamsBuilder();
 
 		// Construct a `KStream` from the input topic "ImageInputTopic", where
 		// message values represent lines of text
 		final KStream<String, String> imageInputLines = builder.stream(imageInputTopic);
 
-		// Stream Processor (in this case 'foreach' to add custom logic, i.e. apply the
-		// analytic model)
-		imageInputLines.foreach((key, value) -> {
+		KStream<String, Object> transformedMessage = imageInputLines.mapValues(value -> {
 
 			System.out.println("Image path: " + value);
 
@@ -88,21 +83,22 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 			InputStream jpegStream;
 			try {
 				jpegStream = new FileInputStream(imagePath);
-				list = recogniser.recognise(jpegStream);
-				System.out.println(list);
+
+				// Prediction of the TensorFlow Image Recognition model:
+				List<Map.Entry<String, Double>> list = recogniser.recognise(jpegStream);
+				String prediction = list.toString();
+				System.out.println("Prediction: " + prediction);
 				recogniser.close();
 				jpegStream.close();
+
+				return prediction;
 			} catch (Exception e) {
 				e.printStackTrace();
+
+				return Collections.emptyList().toString();
 			}
 
 		});
-
-		// airlineInputLines.print();
-
-		// Transform message: Add prediction information
-		KStream<String, Object> transformedMessage = imageInputLines
-				.mapValues(value -> "Prediction: What is the content of this picture? => " + list);
 
 		// Send prediction information to Output Topic
 		transformedMessage.to(imageOutputTopic);
@@ -117,8 +113,8 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 
 		System.out.println("Image Recognition Microservice is running...");
 
-		System.out.println("Input images arrive at Kafka topic " + imageInputTopic + "; Output predictions going to Kafka topic "
-				+ imageOutputTopic);
+		System.out.println("Input images arrive at Kafka topic " + imageInputTopic
+				+ "; Output predictions going to Kafka topic " + imageOutputTopic);
 
 		// Add shutdown hook to respond to SIGTERM and gracefully close Kafka
 		// Streams
