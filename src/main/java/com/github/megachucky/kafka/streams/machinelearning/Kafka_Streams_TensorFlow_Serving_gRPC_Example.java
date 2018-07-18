@@ -30,6 +30,8 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 
+import com.github.megachucky.kafka.streams.machinelearning.TensorflowObjectRecogniser;
+
 /**
  * @author Kai Waehner
  */
@@ -70,7 +72,8 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 		// Construct a `KStream` from the input topic "ImageInputTopic", where
 		// message values represent lines of text
 		final KStream<String, String> imageInputLines = builder.stream(imageInputTopic);
-
+		
+		
 		KStream<String, Object> transformedMessage = imageInputLines.mapValues(value -> {
 
 			System.out.println("Image path: " + value);
@@ -83,22 +86,24 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 			InputStream jpegStream;
 			try {
 				jpegStream = new FileInputStream(imagePath);
-
+				
 				// Prediction of the TensorFlow Image Recognition model:
 				List<Map.Entry<String, Double>> list = recogniser.recognise(jpegStream);
 				String prediction = list.toString();
 				System.out.println("Prediction: " + prediction);
 				recogniser.close();
 				jpegStream.close();
-
-				return prediction;
+   
+                                 return prediction;
 			} catch (Exception e) {
 				e.printStackTrace();
-
-				return Collections.emptyList().toString();
+      
+                                 return Collections.emptyList().toString();
 			}
 
 		});
+		
+
 
 		// Send prediction information to Output Topic
 		transformedMessage.to(imageOutputTopic);
@@ -113,8 +118,8 @@ public class Kafka_Streams_TensorFlow_Serving_gRPC_Example {
 
 		System.out.println("Image Recognition Microservice is running...");
 
-		System.out.println("Input images arrive at Kafka topic " + imageInputTopic
-				+ "; Output predictions going to Kafka topic " + imageOutputTopic);
+		System.out.println("Input images arrive at Kafka topic " + imageInputTopic + "; Output predictions going to Kafka topic "
+				+ imageOutputTopic);
 
 		// Add shutdown hook to respond to SIGTERM and gracefully close Kafka
 		// Streams
