@@ -39,8 +39,9 @@ This architecture allows deployement and managend of different models and versio
 ## Demo: Mixing Stream Processing with RPC: TensorFlow Serving + Kafka Streams
 
 ### Requirements
-- Java 8
-- Docker
+- Install Java 8
+- Install Docker
+- Kafka Streams API 2.0 (configured in pom.xml and downloaded via Maven bulid; Kafka Streams API 1.1 is also compatible)
 
 ### Things to do
 1. Install and start a ML Serving Engine
