@@ -43,6 +43,9 @@ This architecture allows deployement and managend of different models and versio
 - Install Docker
 - Kafka Streams API 2.0 (configured in pom.xml and downloaded via Maven bulid; Kafka Streams API 1.1 is also compatible)
 
+The code is developed and tested on Mac and Linux operating systems. As Kafka does not support and work well on Windows, this is not tested at all.
+
+
 ### Things to do
 1. Install and start a ML Serving Engine
 2. Deploy prebuilt TensorFlow Model
