@@ -16,13 +16,16 @@ However, direct deployment of models is not always a feasible approach. Sometime
 - Simple integration with existing technologies and organizational processes
 - Easier to understand if you come from non-streaming world
 - Later migration to real streaming is also possible
-- Model management built-in for different models and versioning
+- Model management built-in for deployment of different models including versioning, A/B testing, etc.
 
 **Cons:**
+- Often tied to specific ML technologies
 - Worse latency as remote call instead of local inference
+- More complex security setups (remote communication through firewalls)
 - No offline inference (devices, edge processing, etc.)
-- Coupling the availability, scalability, and latency / throughput of your Kafka Streams application with the SLAs of the RPC interface
-- Side-effects (e.g. in case of failure) not covered by Kafka processing (e.g. Exactly Once)
+- Coupling the availability, scalability, and latency / throughput of your stream processing application with the SLAs of the RPC interface
+- Side-effects (e.g. in case of failure) not covered by Kafka processing (e.g. Exactly Once).
+
 
 
 ### TensorFlow Serving
