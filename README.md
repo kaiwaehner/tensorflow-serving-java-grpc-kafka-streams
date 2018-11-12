@@ -22,7 +22,7 @@ However, direct deployment of models is not always a feasible approach. Sometime
 - Often tied to specific ML technologies
 - Often tied to a specific cloud provider and introduces lock-in
 - Worse latency as remote call instead of local inference
-- More complex security setups (remote communication through firewalls)
+- More complex security setups (remote communication through firewalls and authorization management)
 - No offline inference (devices, edge processing, etc.)
 - Coupling the availability, scalability, and latency / throughput of your stream processing application with the SLAs of the RPC interface
 - Side-effects (e.g. in case of failure) not covered by Kafka processing (e.g. Exactly Once).
