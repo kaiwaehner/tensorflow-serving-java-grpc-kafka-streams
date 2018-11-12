@@ -20,6 +20,7 @@ However, direct deployment of models is not always a feasible approach. Sometime
 
 **Cons:**
 - Often tied to specific ML technologies
+- Often tied to a specific cloud provider and introduces lock-in
 - Worse latency as remote call instead of local inference
 - More complex security setups (remote communication through firewalls)
 - No offline inference (devices, edge processing, etc.)
