@@ -45,7 +45,7 @@ This architecture allows deployement and managend of different models and versio
 ### Requirements
 - Install Java 8
 - Install Docker
-- Kafka Streams API 2.0 (configured in pom.xml and downloaded via Maven bulid; Kafka Streams API 1.1 is also compatible)
+- Kafka Streams API 2.1 (configured in pom.xml and downloaded via Maven bulid; Kafka Streams API 2.0 and 1.1 are also compatible)
 
 The code is developed and tested on Mac and Linux operating systems. As Kafka does not support and work well on Windows, this is not tested at all.
 
