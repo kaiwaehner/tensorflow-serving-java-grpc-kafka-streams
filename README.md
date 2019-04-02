@@ -45,7 +45,7 @@ This architecture allows deployement and managend of different models and versio
 ### Requirements
 - Install Java 8
 - Install Docker
-- Kafka Streams API 2.1 (configured in pom.xml and downloaded via Maven bulid; Kafka Streams API 2.0 and 1.1 are also compatible)
+- Kafka Streams API 2.2 (configured in pom.xml and downloaded via Maven build; Kafka Streams API 2.1, 2.0 and 1.1 are also compatible)
 
 The code is developed and tested on Mac and Linux operating systems. As Kafka does not support and work well on Windows, this is not tested at all.
 
@@ -125,10 +125,10 @@ Now send messages, e.g. with kafkacat...
 
                 echo -e "src/main/resources/example.jpg" | kafkacat -b localhost:9092 -P -t ImageInputTopic
                 
-... and consume predictions:
+... and consume predictions (start consumer first if you want to see the 'real time' processing):
 
                 kafka-console-consumer --bootstrap-server localhost:9092 --topic ImageOutputTopic --from-beginning
                 
-To stop everything, stop the Docker container with TensorFlow Serving, stop the Kafka Consumer, and finally stop Kafka using using Confluent CLI (which also deletes all configuration and topics):
+To stop everything, *stop the Docker container with TensorFlow Serving*, *stop the Kafka Consumer*, and finally stop Kafka using using Confluent CLI (which also deletes all configuration and topics):
 
                 confluent destroy
