@@ -104,9 +104,9 @@ You can also create a cluster using Kafka as a Service. Best option is [Confluen
 
 Next create the two Kafka topics for this example ('ImageInputTopic' for URLs to the image and 'ImageOutputTopic' for the prediction result):
                 
-                kafka-topics --zookeeper localhost:2181 --create --topic ImageInputTopic --partitions 3 --replication-factor 1
+                kafka-topics --bootstrap-server localhost:9092 --create --topic ImageInputTopic --partitions 3 --replication-factor 1
                 
-                kafka-topics --zookeeper localhost:2181 --create --topic ImageOutputTopic --partitions 3 --replication-factor 1
+                kafka-topics --bootstrap-server localhost:9092 --create --topic ImageOutputTopic --partitions 3 --replication-factor 1
 
 ### Step 4 Build and deploy Kafka Streams app + send test messages
 The Kafka Streams microservice [Kafka_Streams_TensorFlow_Serving_gRPC_Example](https://github.com/kaiwaehner/tensorflow-serving-java-grpc-kafka-streams/blob/master/src/main/java/com/github/megachucky/kafka/streams/machinelearning/Kafka_Streams_TensorFlow_Serving_gRPC_Example.java) is the Kafka Streams Java client. The microservice uses gRPC and Protobuf for request-response communication with the TensorFlow Serving server to do model inference to predict the contant of the image. Note that the Java client does not need any TensorFlow APIs, but just gRPC interfaces.
