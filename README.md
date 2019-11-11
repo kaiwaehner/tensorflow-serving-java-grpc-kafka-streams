@@ -129,6 +129,6 @@ Now send messages, e.g. with kafkacat...
 
                 kafka-console-consumer --bootstrap-server localhost:9092 --topic ImageOutputTopic --from-beginning
                 
-To stop everything, *stop the Docker container with TensorFlow Serving*, *stop the Kafka Consumer*, and finally stop Kafka using using Confluent CLI (which also deletes all configuration and topics):
+To stop everything, *stop the Docker container with TensorFlow Serving*, *stop the Kafka Consumer*, *shut down the Kafka Streams application* and finally stop Kafka using using Confluent CLI (which also deletes all configuration and topics):
 
                 confluent destroy
